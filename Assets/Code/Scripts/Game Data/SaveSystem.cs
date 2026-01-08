@@ -156,7 +156,7 @@ public class SaveSystem : MonoBehaviour
     #endregion Get Functions
 
 
-    // Use with caution
+    // Use this with caution
     public void ResetGameData()
     {
         if(gameData != null) gameData.levels.Clear();

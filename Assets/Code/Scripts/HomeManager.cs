@@ -13,13 +13,14 @@ public class HomeManager : MonoBehaviour
 
     [Space(20)]
     [Header("Level Screen")]
+    [SerializeField] private GameObject levelScreen;
+    [SerializeField] private CanvasGroup levelScreen_CG;
     [SerializeField] private GameObject[] levelLockVisual;
     [SerializeField] private GameObject[] levelCompleteVisual;
 
     [Space(20)]
     [Header("Settings Screen")]
     [SerializeField] private GameObject settingsScreen;
-    [SerializeField] private CanvasGroup settingsBG;
     [SerializeField] private RectTransform settingsPanel;
     [SerializeField] private LogicButton settingsCloseBtn;
 
@@ -47,7 +48,12 @@ public class HomeManager : MonoBehaviour
 
     private void IntialScreenSetup()
     {
-        // settings screen
+        // Level screen
+        levelScreen_CG.alpha = 0;
+        levelScreen.SetActive(true);
+        levelScreen_CG.DOFade(1, 0.5f);
+
+        // Settings screen
         settingsScreen.SetActive(false);
 
         // level screen
@@ -60,8 +66,6 @@ public class HomeManager : MonoBehaviour
     }
 
 
-
-
     #region Settings
     private void ShowSettings() 
     {
@@ -72,25 +76,35 @@ public class HomeManager : MonoBehaviour
         );
         settingsScreen.SetActive(true);
 
-        // Background fade animation
-        settingsBG.DOKill();
-        settingsBG.DOFade(1f, 0.3f);
+        settingsBtn.gameObject.SetActive(false);
+
+        // Close level screen
+        levelScreen_CG.alpha = 0f;
+        levelScreen.SetActive(false);
 
         // Panel animation to the center
         settingsPanel.DOKill();
-        settingsPanel.DOAnchorPosY(0f, 0.5f).SetEase(Ease.OutBack);
+        settingsPanel.DOAnchorPosY(0f, 0.5f).SetEase(Ease.OutBack).OnComplete(() =>
+        {
+            settingsCloseBtn.gameObject.SetActive(true);
+        });
     }
     private void HideSettings()
     {
+        settingsCloseBtn.gameObject.SetActive(false);
+
         // Panel animation to the center
         settingsPanel.DOKill();
-        settingsPanel.DOAnchorPosY(-canvasRect.rect.height, 0.3f)
+        settingsPanel.DOAnchorPosY(-canvasRect.rect.height, 0.5f)
             .SetEase(Ease.InBack)
             .OnComplete(() =>
             {
-                // Background fade animation
-                settingsBG.DOKill();
-                settingsBG.DOFade(0f, 0.3f).OnComplete(() =>
+                settingsBtn.gameObject.SetActive(true);
+
+                // level screen fade animation
+                levelScreen.SetActive(true);
+                levelScreen_CG.DOKill();
+                levelScreen_CG.DOFade(1f, 0.5f).OnComplete(() =>
                 {
                     settingsScreen.SetActive(false);
                 });
