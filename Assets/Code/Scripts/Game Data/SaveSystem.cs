@@ -86,6 +86,8 @@ public class SaveSystem : MonoBehaviour
             };
             gameData.levels.Add(level);
         }
+
+        SaveGame();
     }
 
     public void CompletedLevel(int levelNumber, int newScore)

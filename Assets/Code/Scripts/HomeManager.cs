@@ -66,24 +66,26 @@ public class HomeManager : MonoBehaviour
     }
 
 
-    #region Settings
-    private void ShowSettings() 
+
+    #region Settings Screen
+    private void ShowSettings()
     {
+        settingsBtn.gameObject.SetActive(false);
+
         // Initially the panel will start from down
+        settingsPanel.DOKill();
         settingsPanel.anchoredPosition = new Vector2(
             settingsPanel.anchoredPosition.x,
             -canvasRect.rect.height
         );
         settingsScreen.SetActive(true);
 
-        settingsBtn.gameObject.SetActive(false);
 
         // Close level screen
         levelScreen_CG.alpha = 0f;
         levelScreen.SetActive(false);
 
         // Panel animation to the center
-        settingsPanel.DOKill();
         settingsPanel.DOAnchorPosY(0f, 0.5f).SetEase(Ease.OutBack).OnComplete(() =>
         {
             settingsCloseBtn.gameObject.SetActive(true);
@@ -99,17 +101,17 @@ public class HomeManager : MonoBehaviour
             .SetEase(Ease.InBack)
             .OnComplete(() =>
             {
-                settingsBtn.gameObject.SetActive(true);
-
                 // level screen fade animation
                 levelScreen.SetActive(true);
                 levelScreen_CG.DOKill();
                 levelScreen_CG.DOFade(1f, 0.5f).OnComplete(() =>
                 {
+                    settingsBtn.gameObject.SetActive(true);
+
                     settingsScreen.SetActive(false);
                 });
             });
     }
-    #endregion Settings
+    #endregion Settings Screen
 
 }
