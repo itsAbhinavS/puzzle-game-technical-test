@@ -9,7 +9,12 @@ public class HomeManager : MonoBehaviour
 
     [Space(20)]
     [Header("Default Screen")]
-    [SerializeField] private LogicButton settingsBtn; 
+    [SerializeField] private LogicButton settingsBtn;
+
+    [Space(20)]
+    [Header("Level Screen")]
+    [SerializeField] private GameObject[] levelLockVisual;
+    [SerializeField] private GameObject[] levelCompleteVisual;
 
     [Space(20)]
     [Header("Settings Screen")]
@@ -40,15 +45,24 @@ public class HomeManager : MonoBehaviour
 
 
 
-    private void IntialScreenSetup() 
+    private void IntialScreenSetup()
     {
+        // settings screen
         settingsScreen.SetActive(false);
+
+        // level screen
+        for (int i = 1; i <= SaveSystem.Instance.GetTotalLevel(); i++) 
+        {
+            levelLockVisual[i-1].SetActive(!SaveSystem.Instance.IsLevelUnlocked(i));
+
+            levelCompleteVisual[i-1].SetActive(SaveSystem.Instance.IsLevelCompleted(i));
+        }
     }
 
 
 
 
-    #region Settings logic
+    #region Settings
     private void ShowSettings() 
     {
         // Initially the panel will start from down
@@ -68,19 +82,20 @@ public class HomeManager : MonoBehaviour
     }
     private void HideSettings()
     {
-        // Background fade animation
-        settingsBG.DOKill();
-        settingsBG.DOFade(0f, 0.3f);
-
         // Panel animation to the center
         settingsPanel.DOKill();
-        settingsPanel.DOAnchorPosY(-canvasRect.rect.height, 0.5f)
+        settingsPanel.DOAnchorPosY(-canvasRect.rect.height, 0.3f)
             .SetEase(Ease.InBack)
             .OnComplete(() =>
             {
-                settingsScreen.SetActive(false);
+                // Background fade animation
+                settingsBG.DOKill();
+                settingsBG.DOFade(0f, 0.3f).OnComplete(() =>
+                {
+                    settingsScreen.SetActive(false);
+                });
             });
     }
-    #endregion Settings logic
+    #endregion Settings
 
 }
