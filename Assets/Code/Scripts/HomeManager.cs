@@ -29,7 +29,8 @@ public class HomeManager : MonoBehaviour
 
     private void Start()
     {
-        IntialScreenSetup();
+        InitialScreenSetup();
+        InitialAudioSetup();
     }
 
 
@@ -48,7 +49,7 @@ public class HomeManager : MonoBehaviour
 
 
 
-    private void IntialScreenSetup()
+    private void InitialScreenSetup()
     {
         // Level screen
         levelScreen_CG.alpha = 0;
@@ -59,14 +60,17 @@ public class HomeManager : MonoBehaviour
         settingsScreen.SetActive(false);
 
         // level screen
-        for (int i = 1; i <= SaveSystem.TotalLevel; i++) 
+        for (int i = 1; i <= SaveSystem.TotalLevel; i++)
         {
-            levelLockVisual[i-1].SetActive(!SaveSystem.Instance.IsLevelUnlocked(i));
+            levelLockVisual[i - 1].SetActive(!SaveSystem.Instance.IsLevelUnlocked(i));
 
-            levelCompleteVisual[i-1].SetActive(SaveSystem.Instance.IsLevelCompleted(i));
+            levelCompleteVisual[i - 1].SetActive(SaveSystem.Instance.IsLevelCompleted(i));
         }
     }
-
+    private void InitialAudioSetup() 
+    {
+        // AudioSystem.Instance.PlayMenuMusic();
+    }
 
 
     #region Settings Screen
