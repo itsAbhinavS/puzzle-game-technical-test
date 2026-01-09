@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HomeManager : MonoBehaviour
 {
@@ -24,25 +25,32 @@ public class HomeManager : MonoBehaviour
     [SerializeField] private GameObject settingsScreen;
     [SerializeField] private RectTransform settingsPanel;
     [SerializeField] private LogicButton settingsCloseBtn;
+    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider sfxSlider;
 
 
 
     private void Start()
     {
         InitialScreenSetup();
-        InitialAudioSetup();
     }
 
 
 
     private void OnEnable()
     {
+        // Settings screen
         settingsBtn.OnClick += ShowSettings;
         settingsCloseBtn.OnClick += HideSettings;
+        musicSlider.onValueChanged.AddListener(OnMusicSliderChange);
+        sfxSlider.onValueChanged.AddListener(OnSFXVolSliderChange);
+
+        // Level screen
         EnableLevelBtn();
     }
     private void OnDisable()
     {
+        // Settings screen
         settingsBtn.OnClick -= ShowSettings;
         settingsCloseBtn.OnClick -= HideSettings;
     }
@@ -51,6 +59,8 @@ public class HomeManager : MonoBehaviour
 
     private void InitialScreenSetup()
     {
+        AudioManager.Instance.PlayMenuMusic();
+
         // Level screen
         levelScreen_CG.alpha = 0;
         levelScreen.SetActive(true);
@@ -58,24 +68,24 @@ public class HomeManager : MonoBehaviour
 
         // Settings screen
         settingsScreen.SetActive(false);
+        musicSlider.value = AudioManager.Instance.GetMusicVolume();
+        sfxSlider.value = AudioManager.Instance.GetSFXVolume();
 
         // level screen
         for (int i = 1; i <= SaveSystem.TotalLevel; i++)
         {
             levelLockVisual[i - 1].SetActive(!SaveSystem.Instance.IsLevelUnlocked(i));
-
             levelCompleteVisual[i - 1].SetActive(SaveSystem.Instance.IsLevelCompleted(i));
         }
     }
-    private void InitialAudioSetup() 
-    {
-        // AudioSystem.Instance.PlayMenuMusic();
-    }
+
 
 
     #region Settings Screen
     private void ShowSettings()
     {
+        AudioManager.Instance.PlayButtonClick();
+
         settingsBtn.gameObject.SetActive(false);
 
         // Initially the panel will start from down
@@ -99,6 +109,8 @@ public class HomeManager : MonoBehaviour
     }
     private void HideSettings()
     {
+        AudioManager.Instance.PlayButtonClick();
+
         settingsCloseBtn.gameObject.SetActive(false);
 
         // Panel animation to the center
@@ -117,7 +129,16 @@ public class HomeManager : MonoBehaviour
                 });
             });
     }
+    private void OnMusicSliderChange(float value)
+    {
+        AudioManager.Instance.SetMusicVolume(value);
+    }
+    private void OnSFXVolSliderChange(float value)
+    {
+        AudioManager.Instance.SetSFXVolume(value);
+    }
     #endregion Settings Screen
+
 
 
     #region Level Screen
@@ -131,6 +152,13 @@ public class HomeManager : MonoBehaviour
     }
     private void InitializeLevelLoad(int selectedLevel)
     {
+        if (!SaveSystem.Instance.IsLevelUnlocked(selectedLevel))
+        {
+            AudioManager.Instance.PlayDeniedSound();
+            return;
+        }
+
+        AudioManager.Instance.PlayButtonClick();
         Debug.Log($"Current Selected Level: {selectedLevel}");
         SaveSystem.Instance.SetCurrentLevel(selectedLevel);
         SceneLoader.Instance.LoadScene(SceneLoader.LEVEL_SCENE + selectedLevel);

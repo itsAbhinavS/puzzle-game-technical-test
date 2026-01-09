@@ -1,10 +1,11 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class AudioSystem : MonoBehaviour
+public class AudioManager : MonoBehaviour
 {
-    public static AudioSystem Instance;
+    public static AudioManager Instance;
 
     [Space(20)]
     [Header("Audio Mixer")]
@@ -22,17 +23,17 @@ public class AudioSystem : MonoBehaviour
     [Header("Music Clips")]
     [SerializeField] private AudioClip menuMusic;
     [SerializeField] private AudioClip gameplayMusic;
+    [SerializeField] private AudioClip winMusic;
 
     [Space(20)]
     [Header("Sound Effect Clips")]
     public AudioClip buttonClick;
-    
-    private AudioSource currentMusicSource;
-    private AudioSource nextMusicSource;
-    private bool isCrossfading = false;
-
+    public AudioClip deniedSound;
+    public AudioClip collectSound;
+  
     private const string MUSIC_VOLUME = "MusicVolume";
     private const string SFX_VOLUME = "SFXVolume";
+    private bool isCrossfading = false;
 
 
     private void Awake()
@@ -54,7 +55,7 @@ public class AudioSystem : MonoBehaviour
 
 
     private void InitializeAudioSources()
-    { 
+    {
         // Configure Music Sources
         musicSource.loop = true;
         musicSource.playOnAwake = false;
@@ -67,65 +68,56 @@ public class AudioSystem : MonoBehaviour
 
 
     #region Music Functions
-    public void PlayMusic(AudioClip clip, bool crossfade = true, float fadeDuration = 1f)
+    public void PlayMenuMusic(float fadeDuration = 1f)
     {
-        if (crossfade && currentMusicSource.isPlaying)
-        {
-            StartCoroutine(CrossfadeMusic(clip, fadeDuration));
-        }
-        else
-        {
-            currentMusicSource.clip = clip;
-            currentMusicSource.Play();
-        }
+        CrossfadeMusic(menuMusic, fadeDuration);
     }
-    public void PlayMenuMusic(bool crossfade = true, float fadeDuration = 1f)
+    public void PlayGameplayMusic(float fadeDuration = 1f)
     {
-        PlayMusic(menuMusic, crossfade, fadeDuration);
+        CrossfadeMusic(gameplayMusic, fadeDuration);
     }
-    public void PlayGameplayMusic(bool crossfade = true, float fadeDuration = 1f)
+    public void PlayWinMusic(float fadeDuration = 1f)
     {
-        PlayMusic(gameplayMusic, crossfade, fadeDuration);
+        CrossfadeMusic(winMusic, fadeDuration);
     }
-    private IEnumerator CrossfadeMusic(AudioClip newClip, float duration)
+    private void CrossfadeMusic(AudioClip musicClip, float duration)
     {
-        if (isCrossfading) yield break;
+        if (musicSource.resource == musicClip) return;
+
+        if (isCrossfading) DOTween.Kill(this);
+        
         isCrossfading = true;
 
-        // Setup next music source
-        nextMusicSource.clip = newClip;
-        nextMusicSource.volume = 0f;
-        nextMusicSource.Play();
+        float volume = GetMusicVolume();
 
-        float elapsed = 0f;
-        float startVolume = currentMusicSource.volume;
-
-        while (elapsed < duration)
+        if (musicSource.resource == null)
         {
-            elapsed += Time.deltaTime;
-            float t = elapsed / duration;
+            musicSource.volume = 0;
+            musicSource.resource = musicClip;
+            musicSource.Play();
+            musicSource.DOFade(1, duration);
 
-            currentMusicSource.volume = Mathf.Lerp(startVolume, 0f, t);
-            nextMusicSource.volume = Mathf.Lerp(0f, startVolume, t);
-
-            yield return null;
+            isCrossfading = false;
         }
+        else 
+        {
+            musicSource.DOFade(0, duration).OnComplete(() =>
+            {
+                musicSource.volume = 0;
+                musicSource.resource = musicClip;
+                musicSource.Play();
+                musicSource.DOFade(1, duration);
 
-        currentMusicSource.Stop();
-        currentMusicSource.volume = startVolume;
-
-        // Swap sources
-        AudioSource temp = currentMusicSource;
-        currentMusicSource = nextMusicSource;
-        nextMusicSource = temp;
-
-        isCrossfading = false;
+                isCrossfading = false;
+            });
+        }
     }
     #endregion Music Functions
 
 
+
     #region Sound Effect Functions
-    public void PlaySFX(AudioClip clip)
+    private void PlaySFX(AudioClip clip)
     {
         sfxSource.PlayOneShot(clip);
     }
@@ -133,7 +125,16 @@ public class AudioSystem : MonoBehaviour
     {
         PlaySFX(buttonClick);
     }
+    public void PlayDeniedSound()
+    {
+        PlaySFX(deniedSound);
+    }
+    public void PlayAuraCollectSound()
+    {
+        PlaySFX(collectSound);
+    }
     #endregion Sound Effect Functions
+
 
 
     #region Volume Control (with Audio Mixer)

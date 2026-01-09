@@ -14,7 +14,9 @@ public class IntroManager : MonoBehaviour
 
     private void Start()
     {
+        ApplicationFrameSetup();
         IntialScreenSetup();
+        InitialAudioSetup();
     }
 
 
@@ -34,6 +36,12 @@ public class IntroManager : MonoBehaviour
     }
 
 
+    private void ApplicationFrameSetup()
+    {
+        QualitySettings.vSyncCount = 0;
+        int screenRefreshRate = Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value);
+        Application.targetFrameRate = screenRefreshRate;
+    }
     private void IntialScreenSetup()
     {
         // Intro screen animation
@@ -57,19 +65,15 @@ public class IntroManager : MonoBehaviour
             });
         });
     }
+    private void InitialAudioSetup()
+    {
+        AudioManager.Instance.PlayMenuMusic();
+    }
 
 
     private void StartGame()
     {
-        SceneLoader sceneLoader = SceneLoader.Instance;
-
-        if (sceneLoader != null)
-        {
-            sceneLoader.LoadScene(SceneLoader.HOME_SCENE);
-        }
-        else 
-        {
-            Debug.LogWarning("SceneLoader missing");
-        }
+        AudioManager.Instance.PlayButtonClick();
+        SceneLoader.Instance.LoadScene(SceneLoader.HOME_SCENE);
     }
 }

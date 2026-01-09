@@ -46,18 +46,20 @@ public class SceneLoader : MonoBehaviour
         progressBar.gameObject.SetActive(false);
         progressBar.value = 0;
 
+        // Screen fade in animation
         loadingScreen.DOKill();
-        // SetLink will auto-kill the tween if the object is destroyed
         yield return loadingScreen.DOFade(1, 0.3f)
             .SetLink(loadingScreen.gameObject)
             .WaitForCompletion();
 
         progressBar.gameObject.SetActive(true);
 
+        // Loading feature (load paused until animation is over)
         float startTime = Time.time;
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         asyncLoad.allowSceneActivation = false;
 
+        // Progress animation
         while (!asyncLoad.isDone)
         {
             float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f);
@@ -82,6 +84,7 @@ public class SceneLoader : MonoBehaviour
             yield return null;
         }
 
+        // Screen fade out animation
         loadingScreen.DOKill();
         if (loadingScreen != null)
         {

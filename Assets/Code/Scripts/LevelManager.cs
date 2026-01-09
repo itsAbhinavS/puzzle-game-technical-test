@@ -23,7 +23,10 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private LogicButton retryBtn;
     [SerializeField] private LogicButton pauseCloseBtn;
 
-
+    private void Start()
+    {
+        AudioManager.Instance.PlayGameplayMusic();
+    }
 
     private void OnEnable()
     {

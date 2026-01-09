@@ -2420,10 +2420,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 6563389923848571246}
   m_HandleRect: {fileID: 9158254057979343950}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.001
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.351
+  m_Value: 0.001
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -5056,10 +5056,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 6361448942459368146}
   m_HandleRect: {fileID: 4275988247149554125}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.001
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.351
+  m_Value: 0.001
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -6274,6 +6274,8 @@ MonoBehaviour:
   settingsScreen: {fileID: 8070815323176512905}
   settingsPanel: {fileID: 1569449465055474517}
   settingsCloseBtn: {fileID: 553156894050588785}
+  musicSlider: {fileID: 9048433623671817912}
+  sfxSlider: {fileID: 7381912465975571022}
 --- !u!1 &4764870982821640566
 GameObject:
   m_ObjectHideFlags: 0
