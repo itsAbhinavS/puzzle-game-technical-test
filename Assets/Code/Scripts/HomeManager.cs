@@ -15,6 +15,7 @@ public class HomeManager : MonoBehaviour
     [Header("Level Screen")]
     [SerializeField] private GameObject levelScreen;
     [SerializeField] private CanvasGroup levelScreen_CG;
+    [SerializeField] private LogicButton[] levelBtn;
     [SerializeField] private GameObject[] levelLockVisual;
     [SerializeField] private GameObject[] levelCompleteVisual;
 
@@ -37,6 +38,7 @@ public class HomeManager : MonoBehaviour
     {
         settingsBtn.OnClick += ShowSettings;
         settingsCloseBtn.OnClick += HideSettings;
+        EnableLevelBtn();
     }
     private void OnDisable()
     {
@@ -57,7 +59,7 @@ public class HomeManager : MonoBehaviour
         settingsScreen.SetActive(false);
 
         // level screen
-        for (int i = 1; i <= SaveSystem.Instance.GetTotalLevel(); i++) 
+        for (int i = 1; i <= SaveSystem.TotalLevel; i++) 
         {
             levelLockVisual[i-1].SetActive(!SaveSystem.Instance.IsLevelUnlocked(i));
 
@@ -107,11 +109,27 @@ public class HomeManager : MonoBehaviour
                 levelScreen_CG.DOFade(1f, 0.5f).OnComplete(() =>
                 {
                     settingsBtn.gameObject.SetActive(true);
-
                     settingsScreen.SetActive(false);
                 });
             });
     }
     #endregion Settings Screen
 
+
+    #region Level Screen
+    private void EnableLevelBtn() 
+    {
+        for (int i = 0; i < SaveSystem.TotalLevel; i++) 
+        {
+            int level = i + 1;
+            levelBtn[i].OnClick += () => InitializeLevelLoad(level);
+        }
+    }
+    private void InitializeLevelLoad(int selectedLevel)
+    {
+        Debug.Log($"Current Selected Level: {selectedLevel}");
+        SaveSystem.Instance.SetCurrentLevel(selectedLevel);
+        SceneLoader.Instance.LoadScene(SceneLoader.LEVEL_SCENE + selectedLevel);
+    }
+    #endregion Level Screen
 }

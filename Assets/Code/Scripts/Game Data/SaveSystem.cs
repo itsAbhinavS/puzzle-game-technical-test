@@ -25,10 +25,17 @@ public class SaveSystem : MonoBehaviour
     #endregion Singleton
 
 
-    private string filePath;
-    private GameData gameData;
-    private const int TOTAL_LEVEL = 9;
+
+    #region Access Variables (Get Only)
+    public static string FilePath { get; private set; }
+    public static GameData gameData { get; private set; }
     
+    public static readonly int TotalLevel = 9;
+    public static int CurrentLevel { get; private set; }
+
+    #endregion Access Variables (Get Only)
+
+
 
     private void Awake()
     {
@@ -42,7 +49,8 @@ public class SaveSystem : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         #endregion Singleton
 
-        filePath = Application.persistentDataPath + "/gamedata.json";
+        FilePath = Application.persistentDataPath + "gamedata.json";
+
         LoadGame();
     }
 
@@ -51,15 +59,15 @@ public class SaveSystem : MonoBehaviour
     public void SaveGame()
     {
         string json = JsonUtility.ToJson(gameData, true);
-        File.WriteAllText(filePath, json);
+        File.WriteAllText(FilePath, json);
     }
     public void LoadGame()
     {
-        if (File.Exists(filePath))
+        if (File.Exists(FilePath))
         {
-            string json = File.ReadAllText(filePath);
+            string json = File.ReadAllText(FilePath);
             gameData = JsonUtility.FromJson<GameData>(json);
-            Debug.Log("Loading data from: " + filePath);
+            Debug.Log("Loading data from: " + FilePath);
         }
         else
         {
@@ -75,7 +83,7 @@ public class SaveSystem : MonoBehaviour
     #region Set Function
     private void InitializeDataSetup()
     {
-        for (int i = 1; i <= TOTAL_LEVEL; i++)
+        for (int i = 1; i <= TotalLevel; i++)
         {
             LevelData level = new LevelData
             {
@@ -110,6 +118,9 @@ public class SaveSystem : MonoBehaviour
             Debug.Log($"Level {levelNumber} completed! Score: {newScore}");
         }
     }
+    
+    public void SetCurrentLevel(int level) => CurrentLevel = level;
+    
     #endregion Set Function
 
 
@@ -150,10 +161,6 @@ public class SaveSystem : MonoBehaviour
             total += level.score;
         }
         return total;
-    }
-    public int GetTotalLevel() 
-    {
-        return TOTAL_LEVEL;
     }
     #endregion Get Functions
 

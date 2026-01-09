@@ -16,7 +16,8 @@ public class SceneLoader : MonoBehaviour
 
 
     // All scenes
-    private const string HOME_SCENE = "Home";
+    public static readonly string HOME_SCENE = "Home";
+    public static readonly string LEVEL_SCENE = "Level";
 
 
     private void Awake() 
@@ -89,10 +90,5 @@ public class SceneLoader : MonoBehaviour
                 .WaitForCompletion();
             loadingScreen.gameObject.SetActive(false);
         }
-    }
-
-    public string GetHomeScene() 
-    {
-        return HOME_SCENE;
     }
 }

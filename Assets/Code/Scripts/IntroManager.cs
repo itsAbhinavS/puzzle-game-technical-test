@@ -40,16 +40,17 @@ public class IntroManager : MonoBehaviour
         introTxt_CG.alpha = 0;
         playBtn_CG.alpha = 0;
         playBtn.gameObject.SetActive(false);
-        introTxt_CG.DOFade(1, 3).OnComplete(() =>
+        introTxt_CG.DOFade(1, 2).OnComplete(() =>
         {
             playBtn.gameObject.SetActive(true);
-            playBtn_CG.DOFade(1, 1).SetDelay(2f).OnComplete(() => 
+            playBtn_CG.DOFade(0.3f, 1).SetDelay(1f).OnComplete(() => 
             {
-                playBtn_CG.DOFade(0.3f, 1f)
+                playBtn_CG.DOFade(1f, 1.2f)
                     .SetLoops(-1, LoopType.Yoyo)
+                    .SetEase(Ease.InOutSine)
                     .SetLink(playBtn_CG.gameObject, LinkBehaviour.KillOnDestroy);
 
-                playTxt.transform.DOScale(1.05f, 1f)
+                playTxt.transform.DOScale(1.05f, 1.2f)
                     .SetLoops(-1, LoopType.Yoyo)
                     .SetEase(Ease.InOutSine)
                     .SetLink(playTxt.gameObject, LinkBehaviour.KillOnDestroy);
@@ -64,7 +65,7 @@ public class IntroManager : MonoBehaviour
 
         if (sceneLoader != null)
         {
-            sceneLoader.LoadScene(sceneLoader.GetHomeScene());
+            sceneLoader.LoadScene(SceneLoader.HOME_SCENE);
         }
         else 
         {
