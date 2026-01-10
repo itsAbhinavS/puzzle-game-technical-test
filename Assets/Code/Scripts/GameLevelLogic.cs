@@ -127,9 +127,11 @@ public class GameLevelLogic : MonoBehaviour
 
         // Stop game interaction
         gameScreen_CG.blocksRaycasts = false;
-        gameScreen_CG.DOFade(0, 2f);
-
-        OnLevelComplete?.Invoke();
+        DOVirtual.DelayedCall(2f, () =>
+        {
+            gameScreen_CG.DOFade(0, 2f);
+            OnLevelComplete?.Invoke();
+        });
     }
     private void Scoring() 
     {

@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using TMPro;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -25,6 +26,7 @@ public class LevelManager : MonoBehaviour
 
     [Space(20)]
     [Header("Win Screen")]
+    [SerializeField] private TextMeshProUGUI levelCompleteTMP;
     [SerializeField] private ParticleSystem winParticle;
     [SerializeField] private GameObject winScreen;
     [SerializeField] private RectTransform winPanel;
@@ -128,6 +130,8 @@ public class LevelManager : MonoBehaviour
     private void WonGame() 
     {
         AudioManager.Instance.PlayWinMusic(0.1f);
+
+        levelCompleteTMP.text = "Level " + SaveSystem.CurrentLevel + " Completed";
 
         // Win particle
         winParticle.Play();

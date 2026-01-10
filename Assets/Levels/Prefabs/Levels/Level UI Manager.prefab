@@ -6825,7 +6825,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Level 1 Completed
+  m_text: Level Completed
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 69f8326e4b6cddc47a75e4f84f683aac, type: 2}
   m_sharedMaterial: {fileID: 2835471920140335177, guid: 69f8326e4b6cddc47a75e4f84f683aac, type: 2}
@@ -7152,6 +7152,7 @@ MonoBehaviour:
   homeBtn: {fileID: 5554894562212285904}
   retryBtn: {fileID: 9006050746447256665}
   pauseCloseBtn: {fileID: 5528413217445704065}
+  levelCompleteTMP: {fileID: 6089095812154436822}
   winParticle: {fileID: 6574733866926355951}
   winScreen: {fileID: 8646640797235848751}
   winPanel: {fileID: 2682632683926541484}
