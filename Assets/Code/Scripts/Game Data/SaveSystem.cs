@@ -30,8 +30,9 @@ public class SaveSystem : MonoBehaviour
     public static string FilePath { get; private set; }
     public static GameData gameData { get; private set; }
     
-    public static readonly int TotalLevel = 9;
+    public static readonly int TotalLevel = 3;
     public static int CurrentLevel { get; private set; }
+    public static int LevelScore { get; private set; }
 
     #endregion Access Variables (Get Only)
 
@@ -120,6 +121,7 @@ public class SaveSystem : MonoBehaviour
     }
     
     public void SetCurrentLevel(int level) => CurrentLevel = level;
+    public void SetCurrentLevelScore(int score) => LevelScore = score;
     
     #endregion Set Function
 

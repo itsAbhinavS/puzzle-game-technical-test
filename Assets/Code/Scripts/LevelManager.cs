@@ -23,9 +23,21 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private LogicButton retryBtn;
     [SerializeField] private LogicButton pauseCloseBtn;
 
+    [Space(20)]
+    [Header("Win Screen")]
+    [SerializeField] private GameObject winScreen;
+    [SerializeField] private RectTransform winPanel;
+    [SerializeField] private LogicButton winHomeBtn;
+    [SerializeField] private LogicButton nextBtn;
+
     private void Start()
     {
         AudioManager.Instance.PlayGameplayMusic();
+
+        // Initial screen setup
+        pauseBtn.gameObject.SetActive(true);
+        pauseScreen.SetActive(false);
+        winScreen.SetActive(false);
     }
 
     private void OnEnable()
@@ -35,6 +47,10 @@ public class LevelManager : MonoBehaviour
         pauseCloseBtn.OnClick += ResumeLevel;
         homeBtn.OnClick += GoHome;
         retryBtn.OnClick += ReteyLevel;
+
+        // Win screen
+        winHomeBtn.OnClick += GoHome;
+        nextBtn.OnClick += NextLevel;
 
         // Game state
         GameLevelLogic.OnLevelComplete += WonGame;
@@ -47,6 +63,10 @@ public class LevelManager : MonoBehaviour
         pauseCloseBtn.OnClick -= ResumeLevel;
         homeBtn.OnClick -= GoHome;
         retryBtn.OnClick -= ReteyLevel;
+
+        // Win screen
+        winHomeBtn.OnClick -= GoHome;
+        nextBtn.OnClick -= NextLevel;
 
         // Game state
         GameLevelLogic.OnLevelComplete -= WonGame;
@@ -69,7 +89,7 @@ public class LevelManager : MonoBehaviour
         OnLevelPause?.Invoke();
 
         // Pause panel animation to the center
-        pausePanel.DOAnchorPosY(0f, 0.5f).SetEase(Ease.OutBack).OnComplete(() =>
+        pausePanel.DOAnchorPosY(-100f, 0.5f).SetEase(Ease.OutBack).OnComplete(() =>
         {
             pauseCloseBtn.gameObject.SetActive(true);
         });
@@ -93,7 +113,36 @@ public class LevelManager : MonoBehaviour
 
     private void WonGame() 
     {
-        
+        AudioManager.Instance.PlayWinMusic(0.1f);
+
+        // Save score
+        if (SaveSystem.Instance.IsLevelCompleted(SaveSystem.CurrentLevel))
+        {
+            if (SaveSystem.LevelScore > SaveSystem.Instance.GetLevelScore(SaveSystem.CurrentLevel))
+            {
+                SaveSystem.Instance.CompletedLevel(SaveSystem.CurrentLevel, SaveSystem.LevelScore);
+            }
+        }
+        else 
+        {
+            SaveSystem.Instance.CompletedLevel(SaveSystem.CurrentLevel, SaveSystem.LevelScore);
+        }
+
+        // Win Panel
+        pauseBtn.gameObject.SetActive(false);
+        DOVirtual.DelayedCall(3f, () =>
+        {
+            // Initially the pause panel will start from down
+            winPanel.DOKill();
+            winPanel.anchoredPosition = new Vector2(
+                pausePanel.anchoredPosition.x,
+                -canvasRect.rect.height
+            );
+            winScreen.SetActive(true);
+
+            // Pause panel animation to the center
+            winPanel.DOAnchorPosY(-100f, 0.5f).SetEase(Ease.OutBack);
+        });
     }
     private void GoHome()
     {
@@ -102,6 +151,19 @@ public class LevelManager : MonoBehaviour
     private void ReteyLevel()
     {
         SceneLoader.Instance.LoadScene(SceneLoader.LEVEL_SCENE + SaveSystem.CurrentLevel);
+    }
+    private void NextLevel() 
+    {
+        if (SaveSystem.CurrentLevel == SaveSystem.TotalLevel)
+        {
+            GoHome();
+        }
+        else 
+        {
+            int newLevel = SaveSystem.CurrentLevel + 1;
+            SaveSystem.Instance.SetCurrentLevel(newLevel); 
+            SceneLoader.Instance.LoadScene(SceneLoader.LEVEL_SCENE + SaveSystem.CurrentLevel);
+        }
     }
     #endregion Game State Function
 }

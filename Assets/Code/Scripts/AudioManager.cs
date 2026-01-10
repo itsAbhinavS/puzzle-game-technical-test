@@ -95,7 +95,7 @@ public class AudioManager : MonoBehaviour
             musicSource.volume = 0;
             musicSource.resource = musicClip;
             musicSource.Play();
-            musicSource.DOFade(1, duration);
+            musicSource.DOFade(volume, duration);
 
             isCrossfading = false;
         }
@@ -143,6 +143,7 @@ public class AudioManager : MonoBehaviour
         float db = LinearToDecibel(volume);
         audioMixer.SetFloat(MUSIC_VOLUME, db);
         PlayerPrefs.SetFloat(MUSIC_VOLUME, volume);
+        musicSource.volume = volume;
     }
 
     public void SetSFXVolume(float volume)
@@ -150,6 +151,7 @@ public class AudioManager : MonoBehaviour
         float db = LinearToDecibel(volume);
         audioMixer.SetFloat(SFX_VOLUME, db);
         PlayerPrefs.SetFloat(SFX_VOLUME, volume);
+        sfxSource.volume = volume;
     }
     
     private float LinearToDecibel(float linear)
