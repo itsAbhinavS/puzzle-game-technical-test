@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -81,6 +82,9 @@ public class GridNode : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         Rotate();
+
+        // play sound
+        AudioManager.Instance.PlaySwitchSound();
     }
     public void Rotate()
     {
@@ -125,12 +129,12 @@ public class GridNode : MonoBehaviour, IPointerClickHandler
     #endregion Rotation Logic
 
 
-    private void CheckIfCanGlow(int gridNum) 
+    private void CheckIfCanGlow(List<bool> gridCorrect, List<int> gridNumber) 
     {
-        /*if (this.gridNumber == gridNum && this.orientation == gridOrientation) 
+        for (int i = 0; i < gridCorrect.Count; i++)
         {
-            Debug.Log($"CAN GLOW {gridNumber} : {orientation}");
-        }*/
+
+        }
     }
 
     public int GetGridNumber() 

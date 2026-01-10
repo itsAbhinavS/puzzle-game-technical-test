@@ -54,7 +54,7 @@ MonoBehaviour:
   winMusic: {fileID: 8300000, guid: 11a0c14b379ecb54596d41440a290c58, type: 3}
   buttonClick: {fileID: 8300000, guid: 237ba98f937651248b1abbd1e8b4e619, type: 3}
   deniedSound: {fileID: 8300000, guid: 0045e91d9b5f2cf4ead34beb9f38f78d, type: 3}
-  collectSound: {fileID: 8300000, guid: 37f2068d428eacd4b814ad9e158636d5, type: 3}
+  switchSound: {fileID: 8300000, guid: 9f69c4e6198161c43b5bc18667acbfac, type: 3}
 --- !u!1 &7550268356323023169
 GameObject:
   m_ObjectHideFlags: 0

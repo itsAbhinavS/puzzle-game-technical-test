@@ -2,11 +2,12 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameLevelLogic : MonoBehaviour
 {
     public static event Action OnLevelComplete;
-    public static event Action<int> OnGridCorrect;
+    public static event Action<List<bool>, List<int>> OnGridCorrect;
 
     [Space(20)]
     [Header("Level Screen")]
@@ -21,7 +22,8 @@ public class GameLevelLogic : MonoBehaviour
     [Header("Win Sequence")]
     [SerializeField] private List<GridSequence> gridSequence;
     [SerializeField] private List<bool> gridCorrect;
-
+    [SerializeField] private List<int> gridNumbers;
+    private int score = 0;
 
 
     private void Start()
@@ -53,6 +55,9 @@ public class GameLevelLogic : MonoBehaviour
         gameScreen_CG.alpha = 0;
         gameScreen.SetActive(true);
         gameScreen_CG.DOFade(1, 0.5f);
+
+        // 0 score intiially
+        SaveSystem.Instance.SetCurrentLevelScore(0);
     }
     public void ShowGame()
     {
@@ -90,6 +95,7 @@ public class GameLevelLogic : MonoBehaviour
                     winSeq.Orientation == gridItem[index].GetGridOrientation())
                 {
                     gridCorrect[index] = true;
+                    gridNumbers[index] = winSeq.GridNumber;
                 }
                 else 
                 {
@@ -99,6 +105,10 @@ public class GameLevelLogic : MonoBehaviour
                 index = index + 1;
             }
         }
+
+        OnGridCorrect?.Invoke(gridCorrect, gridNumbers);
+
+        Scoring();
 
         CheckWinSequence();
     }
@@ -116,6 +126,11 @@ public class GameLevelLogic : MonoBehaviour
         gameScreen_CG.DOFade(0, 2f);
 
         OnLevelComplete?.Invoke();
+    }
+    private void Scoring() 
+    {
+        score = score + 20 + SaveSystem.CurrentLevel;
+        SaveSystem.Instance.SetCurrentLevelScore(score);
     }
     #endregion Grid Manager
 }

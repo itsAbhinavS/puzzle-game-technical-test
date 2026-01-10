@@ -25,6 +25,7 @@ public class LevelManager : MonoBehaviour
 
     [Space(20)]
     [Header("Win Screen")]
+    [SerializeField] private ParticleSystem winParticle;
     [SerializeField] private GameObject winScreen;
     [SerializeField] private RectTransform winPanel;
     [SerializeField] private LogicButton winHomeBtn;
@@ -76,6 +77,9 @@ public class LevelManager : MonoBehaviour
     #region Game State Function
     private void PauseLevel()
     {
+        // play click sound
+        AudioManager.Instance.PlayButtonClick();
+
         pauseBtn.gameObject.SetActive(false);
 
         // Initially the pause panel will start from down
@@ -97,6 +101,9 @@ public class LevelManager : MonoBehaviour
 
     private void ResumeLevel()
     {
+        // play click sound
+        AudioManager.Instance.PlayButtonClick();
+
         pauseCloseBtn.gameObject.SetActive(false);
 
         // Panel animation to the center
@@ -115,6 +122,9 @@ public class LevelManager : MonoBehaviour
     {
         AudioManager.Instance.PlayWinMusic(0.1f);
 
+        // Win particle
+        winParticle.Play();
+
         // Save score
         if (SaveSystem.Instance.IsLevelCompleted(SaveSystem.CurrentLevel))
         {
@@ -128,7 +138,7 @@ public class LevelManager : MonoBehaviour
             SaveSystem.Instance.CompletedLevel(SaveSystem.CurrentLevel, SaveSystem.LevelScore);
         }
 
-        // Win Panel
+        // Win Panel show animation
         pauseBtn.gameObject.SetActive(false);
         DOVirtual.DelayedCall(3f, () =>
         {
@@ -146,14 +156,23 @@ public class LevelManager : MonoBehaviour
     }
     private void GoHome()
     {
+        // play click sound
+        AudioManager.Instance.PlayButtonClick();
+
         SceneLoader.Instance.LoadScene(SceneLoader.HOME_SCENE);
     }
     private void ReteyLevel()
     {
+        // play click sound
+        AudioManager.Instance.PlayButtonClick();
+
         SceneLoader.Instance.LoadScene(SceneLoader.LEVEL_SCENE + SaveSystem.CurrentLevel);
     }
-    private void NextLevel() 
+    private void NextLevel()
     {
+        // play click sound
+        AudioManager.Instance.PlayButtonClick();
+
         if (SaveSystem.CurrentLevel == SaveSystem.TotalLevel)
         {
             GoHome();

@@ -4745,6 +4745,8 @@ MonoBehaviour:
   - {fileID: 4312028129597815078}
   - {fileID: 8389834558469719265}
   - {fileID: 7890162368503239710}
+  auraScore: {fileID: 4945323953040928608}
+  auraLayout: {fileID: 3816127306070517889}
   settingsScreen: {fileID: 8070815323176512905}
   settingsPanel: {fileID: 1569449465055474517}
   settingsCloseBtn: {fileID: 553156894050588785}
@@ -5103,7 +5105,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 679.545, y: -50}
-  m_SizeDelta: {x: 109.4, y: 0}
+  m_SizeDelta: {x: 39.55, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &293971797802325654
 CanvasRenderer:
@@ -5133,7 +5135,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 999
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 69f8326e4b6cddc47a75e4f84f683aac, type: 2}
   m_sharedMaterial: {fileID: 2835471920140335177, guid: 69f8326e4b6cddc47a75e4f84f683aac, type: 2}
@@ -7752,7 +7754,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 440.3, y: -50}
+  m_AnchoredPosition: {x: 475.22498, y: -50}
   m_SizeDelta: {x: 189.09, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3000960992850126989

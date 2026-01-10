@@ -29,7 +29,7 @@ public class AudioManager : MonoBehaviour
     [Header("Sound Effect Clips")]
     public AudioClip buttonClick;
     public AudioClip deniedSound;
-    public AudioClip collectSound;
+    public AudioClip switchSound;
   
     private const string MUSIC_VOLUME = "MusicVolume";
     private const string SFX_VOLUME = "SFXVolume";
@@ -129,9 +129,9 @@ public class AudioManager : MonoBehaviour
     {
         PlaySFX(deniedSound);
     }
-    public void PlayAuraCollectSound()
+    public void PlaySwitchSound()
     {
-        PlaySFX(collectSound);
+        PlaySFX(switchSound);
     }
     #endregion Sound Effect Functions
 

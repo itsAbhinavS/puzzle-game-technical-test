@@ -1,4 +1,5 @@
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,10 @@ public class HomeManager : MonoBehaviour
     [SerializeField] private LogicButton[] levelBtn;
     [SerializeField] private GameObject[] levelLockVisual;
     [SerializeField] private GameObject[] levelCompleteVisual;
+
+    [Header("Score Settings")]
+    [SerializeField] private TextMeshProUGUI auraScore; 
+    public RectTransform auraLayout;
 
     [Space(20)]
     [Header("Settings Screen")]
@@ -77,6 +82,20 @@ public class HomeManager : MonoBehaviour
             levelLockVisual[i - 1].SetActive(!SaveSystem.Instance.IsLevelUnlocked(i));
             levelCompleteVisual[i - 1].SetActive(SaveSystem.Instance.IsLevelCompleted(i));
         }
+
+        // Prepare score
+        int score = 0;
+        DOTween.To(() => score, x => score = x, SaveSystem.Instance.GetTotalScore(), 1f)
+            .OnUpdate(() => {
+                
+                // Score animation
+                auraScore.text = score.ToString();
+
+                // Rebuild layout to fix the horizonatal layout compenent
+                LayoutRebuilder.ForceRebuildLayoutImmediate(auraLayout);
+            })
+            .SetEase(Ease.Linear);
+
     }
 
 
@@ -140,7 +159,6 @@ public class HomeManager : MonoBehaviour
     #endregion Settings Screen
 
 
-
     #region Level Screen
     private void EnableLevelBtn() 
     {
@@ -154,11 +172,14 @@ public class HomeManager : MonoBehaviour
     {
         if (!SaveSystem.Instance.IsLevelUnlocked(selectedLevel))
         {
+            // play deny sound
             AudioManager.Instance.PlayDeniedSound();
             return;
         }
 
+        // play click sound
         AudioManager.Instance.PlayButtonClick();
+
         Debug.Log($"Current Selected Level: {selectedLevel}");
         SaveSystem.Instance.SetCurrentLevel(selectedLevel);
         SceneLoader.Instance.LoadScene(SceneLoader.LEVEL_SCENE + selectedLevel);
