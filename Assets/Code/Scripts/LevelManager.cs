@@ -31,6 +31,13 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private LogicButton winHomeBtn;
     [SerializeField] private LogicButton nextBtn;
 
+
+    private void Awake()
+    {
+        winParticle.Stop();
+    }
+
+
     private void Start()
     {
         AudioManager.Instance.PlayGameplayMusic();
