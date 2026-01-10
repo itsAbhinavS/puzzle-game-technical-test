@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class GridNode : MonoBehaviour, IPointerClickHandler
 {
@@ -14,12 +15,20 @@ public class GridNode : MonoBehaviour, IPointerClickHandler
     [SerializeField] private int gridNumber;
     [SerializeField] private GridOrientation orientation;
 
+    [Space(20)]
+    [Header("Grid Settings")]
+    [SerializeField] private List<Image> gridImg;
+    private string glowHex = "#FFFFFF";
+    private string noGlowHex = "#4C4C4C";
+    private Color noGlowColor;
+    private Color glowColor;
+
     private int rotationSteps; // 0, 1, 2, 3
 
 
     private void Awake()
     {
-        // Initialize rotationSteps based on current Z rotation
+        IntializeGlowColors();
         InitializeRotationFromTransform();
         UpdateOrientation();
     }
@@ -129,14 +138,50 @@ public class GridNode : MonoBehaviour, IPointerClickHandler
     #endregion Rotation Logic
 
 
+    #region Glow Logic
+    private void IntializeGlowColors()
+    {
+        if (!ColorUtility.TryParseHtmlString(noGlowHex, out noGlowColor))
+        {
+            Debug.LogError("Invalid noGlowHex string format!");
+        }
+        if (!ColorUtility.TryParseHtmlString(glowHex, out glowColor))
+        {
+            Debug.LogError("Invalid glowHex string format!");
+        }
+    }
     private void CheckIfCanGlow(List<bool> gridCorrect, List<int> gridNumber) 
     {
         for (int i = 0; i < gridCorrect.Count; i++)
         {
+            if (gridCorrect[i] == true && gridNumber[i] == this.gridNumber) 
+            {
+                SetAllToGlowColor();
+                return;
+            }
+        }
 
+        SetAllToNoGlowColor();
+    }
+    public void SetAllToGlowColor()
+    {
+        foreach (Image img in gridImg)
+        {
+            img.color = glowColor;
         }
     }
 
+    public void SetAllToNoGlowColor()
+    {
+        foreach (Image img in gridImg)
+        {
+            img.color = noGlowColor;
+        }
+    }
+    #endregion Glow Logic
+
+
+    #region Get Functions
     public int GetGridNumber() 
     {
         return gridNumber;
@@ -145,4 +190,5 @@ public class GridNode : MonoBehaviour, IPointerClickHandler
     {
         return orientation;
     }
+    #endregion Get Functions
 }

@@ -58,6 +58,8 @@ public class GameLevelLogic : MonoBehaviour
 
         // 0 score intiially
         SaveSystem.Instance.SetCurrentLevelScore(0);
+
+        CheckGridCorrect();
     }
     public void ShowGame()
     {
@@ -83,6 +85,8 @@ public class GameLevelLogic : MonoBehaviour
         {
             gridCorrect[i] = false;
         }
+
+        gridCorrect[0] = true;
 
         foreach (GridSequence gridSeq in gridSequence)
         {
