@@ -44,7 +44,7 @@ public class GridNode : MonoBehaviour, IPointerClickHandler
     }
 
 
-
+    #region Orientation Logic
     private void InitializeRotationFromTransform()
     {
         // Get current Z rotation
@@ -84,6 +84,8 @@ public class GridNode : MonoBehaviour, IPointerClickHandler
         if (angle < 0f) angle += 360f;
         return angle;
     }
+    #endregion Orientation Logic
+
 
 
     #region Rotation Logic
@@ -109,6 +111,7 @@ public class GridNode : MonoBehaviour, IPointerClickHandler
 
         float targetRotation = rotationSteps * 90f;
 
+        // Rotation animation on this grid
         transform.DOKill();
         transform.DORotate(new Vector3(0, 0, -targetRotation), 0.2f)
             .SetEase(Ease.OutBack)

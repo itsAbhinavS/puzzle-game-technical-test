@@ -162,6 +162,7 @@ public class HomeManager : MonoBehaviour
     #region Level Screen
     private void EnableLevelBtn() 
     {
+        // For each level button try to load the level
         for (int i = 0; i < SaveSystem.TotalLevel; i++) 
         {
             int level = i + 1;
@@ -170,6 +171,7 @@ public class HomeManager : MonoBehaviour
     }
     private void InitializeLevelLoad(int selectedLevel)
     {
+        // If level is locked we do not load it
         if (!SaveSystem.Instance.IsLevelUnlocked(selectedLevel))
         {
             // play deny sound
@@ -180,6 +182,7 @@ public class HomeManager : MonoBehaviour
         // play click sound
         AudioManager.Instance.PlayButtonClick();
 
+        // Load level
         Debug.Log($"Current Selected Level: {selectedLevel}");
         SaveSystem.Instance.SetCurrentLevel(selectedLevel);
         SceneLoader.Instance.LoadScene(SceneLoader.LEVEL_SCENE + selectedLevel);

@@ -2,7 +2,6 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class GameLevelLogic : MonoBehaviour
 {
@@ -149,9 +148,9 @@ public class GameLevelLogic : MonoBehaviour
         OnLevelComplete?.Invoke();
 
         // Slowly fade away animation after a delay
-        DOVirtual.DelayedCall(2f, () =>
+        DOVirtual.DelayedCall(1f, () =>
         {
-            gameScreen_CG.DOFade(0, 0.5f);
+            gameScreen_CG.DOFade(0, 1f);
         });
     }
     #endregion Grid Manager

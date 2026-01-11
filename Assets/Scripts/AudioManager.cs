@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -84,6 +83,7 @@ public class AudioManager : MonoBehaviour
     {
         if (musicSource.resource == musicClip) return;
 
+        // if already a fade is playing - kill it
         if (isCrossfading) DOTween.Kill(this);
         
         isCrossfading = true;
@@ -92,6 +92,7 @@ public class AudioManager : MonoBehaviour
 
         if (musicSource.resource == null)
         {
+            // Audio plays smoothly
             musicSource.volume = 0;
             musicSource.resource = musicClip;
             musicSource.Play();
@@ -99,14 +100,15 @@ public class AudioManager : MonoBehaviour
 
             isCrossfading = false;
         }
-        else 
+        else
         {
+            // Audio swtching blend
             musicSource.DOFade(0, duration).OnComplete(() =>
             {
                 musicSource.volume = 0;
                 musicSource.resource = musicClip;
                 musicSource.Play();
-                musicSource.DOFade(1, duration);
+                musicSource.DOFade(volume, duration);
 
                 isCrossfading = false;
             });

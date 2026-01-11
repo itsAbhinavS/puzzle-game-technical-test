@@ -41,8 +41,6 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         AudioManager.Instance.PlayGameplayMusic();
-        winParticle.Play();
-        winParticle.Stop();
 
         // Initial screen setup
         pauseBtn.gameObject.SetActive(true);

@@ -42,6 +42,7 @@ public class SceneLoader : MonoBehaviour
 
     private IEnumerator LoadSceneAsync(string sceneName)
     {
+        // Setup the intial load screen state
         loadingScreen.gameObject.SetActive(true);
         progressBar.gameObject.SetActive(false);
         progressBar.value = 0;

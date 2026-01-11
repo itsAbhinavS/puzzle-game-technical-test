@@ -37,6 +37,7 @@ public class IntroManager : MonoBehaviour
 
     private void ApplicationFrameSetup()
     {
+        // Lock fps to device current refresh rate
         QualitySettings.vSyncCount = 0;
         int screenRefreshRate = Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value);
         Application.targetFrameRate = screenRefreshRate;
