@@ -86,7 +86,6 @@ public class GridNode : MonoBehaviour, IPointerClickHandler
     }
 
 
-
     #region Rotation Logic
     public void OnPointerClick(PointerEventData eventData)
     {

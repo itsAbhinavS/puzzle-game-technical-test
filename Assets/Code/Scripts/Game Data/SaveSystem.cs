@@ -51,7 +51,6 @@ public class SaveSystem : MonoBehaviour
         #endregion Singleton
 
         FilePath = Application.persistentDataPath + "gamedata.json";
-
         LoadGame();
     }
 

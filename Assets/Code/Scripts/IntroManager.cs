@@ -11,7 +11,6 @@ public class IntroManager : MonoBehaviour
     [SerializeField] private CanvasGroup playBtn_CG;
     [SerializeField] private Transform playTxt;
 
-
     private void Start()
     {
         ApplicationFrameSetup();
@@ -67,7 +66,7 @@ public class IntroManager : MonoBehaviour
     }
     private void InitialAudioSetup()
     {
-        AudioManager.Instance.PlayMenuMusic();
+        AudioManager.Instance.PlayMenuMusic(0.5f);
     }
 
 

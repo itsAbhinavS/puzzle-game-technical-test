@@ -23,12 +23,24 @@ public class GameLevelLogic : MonoBehaviour
     [SerializeField] private List<GridSequence> gridSequence;
     [SerializeField] private List<bool> gridCorrect;
     [SerializeField] private List<int> gridNumbers;
-    private int score = 0;
 
+    [Header("Score Settings")]
+    [SerializeField] private int baseScore = 1000;
+    [SerializeField] private int rotationPenalty = 10;
+    [SerializeField] private float timeLimit = 100f; 
+    private int currentScore = 0;
+    private float startTime = 0;
+    private float elapsedTime = 0;
+
+    private void Awake()
+    {
+        DOTween.Init(true, true, LogBehaviour.ErrorsOnly).SetCapacity(500, 50);
+    }
 
     private void Start()
     {
         IntialScreenSetup();
+        InitialScoreSetup();
     }
 
 
@@ -59,7 +71,10 @@ public class GameLevelLogic : MonoBehaviour
         // 0 score intiially
         SaveSystem.Instance.SetCurrentLevelScore(0);
 
-        CheckGridCorrect();
+        // This is runned to simply initialize the grid glow effect
+        gridCorrect[0] = true;
+        gridNumbers[0] = gridSequence[0].Sequence[0].GridNumber;
+        OnGridCorrect?.Invoke(gridCorrect, gridNumbers);
     }
     public void ShowGame()
     {
@@ -74,8 +89,6 @@ public class GameLevelLogic : MonoBehaviour
         gameScreen.SetActive(false);
     }
     #endregion UI Setup
-
-
 
 
     #region Grid Manager
@@ -112,11 +125,10 @@ public class GameLevelLogic : MonoBehaviour
 
         OnGridCorrect?.Invoke(gridCorrect, gridNumbers);
 
-        Scoring();
+        SetScore();
 
         CheckWinSequence();
     }
-
     private void CheckWinSequence()
     {
         for (int i = 0; i < gridCorrect.Count; i++)
@@ -125,20 +137,65 @@ public class GameLevelLogic : MonoBehaviour
                 return;
         }
 
-        // Stop game interaction
+        // Win sequence
         gameScreen_CG.blocksRaycasts = false;
+        CalculateFinalScore();
+        ShakeGameScreen();
+        GameFinishState();
+    }
+    private void GameFinishState()
+    {
+        // Publish/raise delegates to let other know
+        OnLevelComplete?.Invoke();
+
+        // Slowly fade away animation after a delay
         DOVirtual.DelayedCall(2f, () =>
         {
-            gameScreen_CG.DOFade(0, 2f);
-            OnLevelComplete?.Invoke();
+            gameScreen_CG.DOFade(0, 0.5f);
         });
     }
-    private void Scoring() 
-    {
-        score = score + 20 + SaveSystem.CurrentLevel;
-        SaveSystem.Instance.SetCurrentLevelScore(score);
-    }
     #endregion Grid Manager
+
+
+    #region Score System
+    private void InitialScoreSetup()
+    {
+        currentScore = baseScore;
+        startTime = Time.time;
+        elapsedTime = 0;
+    }
+    private void SetScore()
+    {
+        currentScore = Mathf.Max(0, currentScore - rotationPenalty);
+    }
+    private void CalculateFinalScore()
+    {
+        elapsedTime = Time.time - startTime;
+        
+        float remainingTime = Mathf.Max(0, timeLimit - elapsedTime);
+
+        int tenthsRemaining = Mathf.FloorToInt(remainingTime * 10f);
+
+        int timeScore = tenthsRemaining * 2;
+
+        currentScore += timeScore;
+
+        SaveSystem.Instance.SetCurrentLevelScore(currentScore);
+    }
+    #endregion Score System
+
+
+    private void ShakeGameScreen()
+    {
+        gameScreen.transform.DOShakePosition(
+            duration: 4f,
+            strength: new Vector3(10f, 10f, 0f), // Only X and Y
+            vibrato: 50,
+            randomness: 90,
+            snapping: false,
+            fadeOut: true
+        ).SetDelay(0.5f);
+    }
 }
 
 

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 9039190660807721237}
   - component: {fileID: 7547326892667297683}
   - component: {fileID: 4174369587296311428}
-  - component: {fileID: 6353802563188007445}
   m_Layer: 5
   m_Name: Grid 13
   m_TagString: Untagged
@@ -76,22 +75,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6353802563188007445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 628630275526577226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5841a3b801de764891ee78993693c1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Node
-  gridType: 0
-  gridNumber: 0
-  orientation: 0
-  gridImg: []
 --- !u!1 &1499242892562408214
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,7 +236,6 @@ GameObject:
   - component: {fileID: 2497491813688088792}
   - component: {fileID: 14459070814854727}
   - component: {fileID: 2811264230413489164}
-  - component: {fileID: 2690018150741327370}
   m_Layer: 5
   m_Name: Grid 14
   m_TagString: Untagged
@@ -318,22 +300,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2690018150741327370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2617865264684471072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5841a3b801de764891ee78993693c1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Node
-  gridType: 0
-  gridNumber: 0
-  orientation: 0
-  gridImg: []
 --- !u!1 &3278536866326095329
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,6 +635,9 @@ MonoBehaviour:
       Orientation: 2
   gridCorrect: 0000000000
   gridNumbers: 0000000000000000000000000000000000000000
+  baseScore: 1000
+  rotationPenalty: 10
+  timeLimit: 100
 --- !u!1 &4163643937391202658
 GameObject:
   m_ObjectHideFlags: 0
@@ -827,7 +796,6 @@ GameObject:
   - component: {fileID: 848884904171543886}
   - component: {fileID: 603806323037974793}
   - component: {fileID: 6944663503333276550}
-  - component: {fileID: 8185845579588687980}
   m_Layer: 5
   m_Name: Grid 15
   m_TagString: Untagged
@@ -892,22 +860,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8185845579588687980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4727970720518943449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5841a3b801de764891ee78993693c1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Node
-  gridType: 0
-  gridNumber: 0
-  orientation: 0
-  gridImg: []
 --- !u!1 &5090096005956121728
 GameObject:
   m_ObjectHideFlags: 0
@@ -919,7 +871,6 @@ GameObject:
   - component: {fileID: 7870200140519531047}
   - component: {fileID: 4406658768239569373}
   - component: {fileID: 8564757219829449206}
-  - component: {fileID: 4216943371109718123}
   m_Layer: 5
   m_Name: Grid 16
   m_TagString: Untagged
@@ -984,22 +935,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4216943371109718123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5090096005956121728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5841a3b801de764891ee78993693c1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Node
-  gridType: 0
-  gridNumber: 0
-  orientation: 0
-  gridImg: []
 --- !u!1 &5709017792017530297
 GameObject:
   m_ObjectHideFlags: 0

@@ -64,7 +64,7 @@ public class HomeManager : MonoBehaviour
 
     private void InitialScreenSetup()
     {
-        AudioManager.Instance.PlayMenuMusic();
+        AudioManager.Instance.PlayMenuMusic(0.5f);
 
         // Level screen
         levelScreen_CG.alpha = 0;

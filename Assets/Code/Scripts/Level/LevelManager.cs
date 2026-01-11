@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
@@ -32,17 +33,16 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private RectTransform winPanel;
     [SerializeField] private LogicButton winHomeBtn;
     [SerializeField] private LogicButton nextBtn;
-
-
-    private void Awake()
-    {
-        winParticle.Stop();
-    }
+    [Header("Score Settings")]
+    [SerializeField] private TextMeshProUGUI auraScore;
+    public RectTransform auraLayout;
 
 
     private void Start()
     {
         AudioManager.Instance.PlayGameplayMusic();
+        winParticle.Play();
+        winParticle.Stop();
 
         // Initial screen setup
         pauseBtn.gameObject.SetActive(true);
@@ -130,39 +130,45 @@ public class LevelManager : MonoBehaviour
     private void WonGame() 
     {
         AudioManager.Instance.PlayWinMusic(0.1f);
+        levelCompleteTMP.text = $"Level {SaveSystem.CurrentLevel} Completed";
 
-        levelCompleteTMP.text = "Level " + SaveSystem.CurrentLevel + " Completed";
-
-        // Win particle
-        winParticle.Play();
-
-        // Save score
-        if (SaveSystem.Instance.IsLevelCompleted(SaveSystem.CurrentLevel))
-        {
-            if (SaveSystem.LevelScore > SaveSystem.Instance.GetLevelScore(SaveSystem.CurrentLevel))
-            {
-                SaveSystem.Instance.CompletedLevel(SaveSystem.CurrentLevel, SaveSystem.LevelScore);
-            }
-        }
-        else 
-        {
-            SaveSystem.Instance.CompletedLevel(SaveSystem.CurrentLevel, SaveSystem.LevelScore);
-        }
+        SaveScoreLogic();
 
         // Win Panel show animation
+
         pauseBtn.gameObject.SetActive(false);
+
         DOVirtual.DelayedCall(3f, () =>
         {
             // Initially the pause panel will start from down
-            winPanel.DOKill();
-            winPanel.anchoredPosition = new Vector2(
-                pausePanel.anchoredPosition.x,
-                -canvasRect.rect.height
-            );
+            winPanel.anchoredPosition = new Vector2(pausePanel.anchoredPosition.x, -canvasRect.rect.height);
+
             winScreen.SetActive(true);
 
             // Pause panel animation to the center
-            winPanel.DOAnchorPosY(-100f, 0.5f).SetEase(Ease.OutBack);
+            winPanel.DOAnchorPosY(-100f, 0.5f).SetEase(Ease.OutBack).OnComplete(() =>
+            {
+                // Score animation
+                int score = 0;
+                int finalScore = SaveSystem.Instance.GetLevelScore(SaveSystem.CurrentLevel);
+
+                DOTween.To(() => score, x => score = x, finalScore, 1f)
+                    .OnUpdate(() =>
+                    {
+                        auraScore.text = score.ToString();
+                    })
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(auraLayout);
+                    });
+            });
+        });
+
+
+        DOVirtual.DelayedCall(1f, () =>
+        {
+            winParticle.Play();
         });
     }
     private void GoHome()
@@ -191,9 +197,27 @@ public class LevelManager : MonoBehaviour
         else 
         {
             int newLevel = SaveSystem.CurrentLevel + 1;
-            SaveSystem.Instance.SetCurrentLevel(newLevel); 
+            SaveSystem.Instance.SetCurrentLevel(newLevel);
             SceneLoader.Instance.LoadScene(SceneLoader.LEVEL_SCENE + SaveSystem.CurrentLevel);
         }
     }
     #endregion Game State Function
+
+
+    #region Logic Function
+    private void SaveScoreLogic()
+    {
+        if (SaveSystem.Instance.IsLevelCompleted(SaveSystem.CurrentLevel))
+        {
+            if (SaveSystem.LevelScore > SaveSystem.Instance.GetLevelScore(SaveSystem.CurrentLevel))
+            {
+                SaveSystem.Instance.CompletedLevel(SaveSystem.CurrentLevel, SaveSystem.LevelScore);
+            }
+        }
+        else
+        {
+            SaveSystem.Instance.CompletedLevel(SaveSystem.CurrentLevel, SaveSystem.LevelScore);
+        }
+    }
+    #endregion Logic Function
 }
