@@ -16,7 +16,7 @@ public class SceneLoader : MonoBehaviour
 
 
     // All scenes
-    public static readonly string HOME_SCENE = "Home";
+    public static readonly string HOME_SCENE = "Menu";
     public static readonly string LEVEL_SCENE = "Level";
 
 
