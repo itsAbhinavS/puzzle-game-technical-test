@@ -77,6 +77,8 @@ public class GridNode : MonoBehaviour, IPointerClickHandler
         {
             rotationSteps = Mathf.RoundToInt(currentZ / 90f) % 4;
         }
+
+        Rotate();
     }
     private float NormalizeAngle(float angle)
     {
@@ -85,7 +87,6 @@ public class GridNode : MonoBehaviour, IPointerClickHandler
         return angle;
     }
     #endregion Orientation Logic
-
 
 
     #region Rotation Logic
